@@ -1,0 +1,29 @@
+  async findDietaCentro(fechaDieta: Date, adncenate): Promise<DietaCentro[]> {
+    return await this.repository.query(
+      `SELECT * FROM GCMHOSDIECEN WHERE ADNCENATE = @0 AND DIEFECJOR = @1`,
+      [adncenate, fechaDieta.toISOString().split('T')[0]]
+    );
+  }
+
+  async findDietaJornada(fechaDieta: Date, adncenate): Promise<any[]> {
+    return await this.repository.query(
+      `SELECT * FROM GCMHOSDIECEN WHERE ADNCENATE = @0 AND DIEFECJOR = @1`,
+      [adncenate, fechaDieta.toISOString().split('T')[0]]
+    );
+  }
+
+
+  {
+  "fechaDieta": "2021-11-12T12:35:37.163Z",
+  "dietaJornada": 3,
+  "adncenate": 2,
+  "subgroup": 44,
+  "pacientes": [
+    {
+"HPNESTANC": 4444,
+"DIEGRUTIP": "BLANDO",
+"DIEGRUCON": "CONSIS",
+"DIEGRUOBS": "OBSER"
+}
+  ]
+}

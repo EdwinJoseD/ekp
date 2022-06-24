@@ -1,0 +1,108 @@
+import * as cn from "src/application/services/connection.service";
+import { PacienteI } from "src/domain/modules/hospitalizacion/pacientes/interfaces/paciente.interface";
+
+export const getPacientes = async (context: string): Promise<PacienteI[]> => {
+  try {
+    const result = await cn.getDataSource(context).query(
+      `SELECT
+      --ACACODIGO,
+      --GENPRESAL,
+      --HPNDEFCAM,
+      --HSUCODIGO,
+      --HSUNOMBRE,
+      --HGRCODIGO,
+      --HGRNOMBRE,
+      --GENARESER,
+      --ADNCENATE,
+      --GENDIAGNO,
+      --DIACODIGO,
+      --DIANOMBRE,
+      --GENPACIEN,
+      --HCAESTADO,
+      --GASCODIGO,
+      --GENDETCON,
+      --GDECODIGO,
+      HPNESTANC ESTANCIA,
+      AINDIAEST DIASESTANCIA,
+      ADNINGRESO,
+      AINCONSEC,
+      AINFECING FECHAINGRESO,
+      PRECODIGO,
+      PRENOMBRE,
+      HESFECSAL FECHASALIDA,
+      HCACODIGO CODIGOCAMA,
+      HCANOMBRE UBICACIONCAMA,
+      HSUNOMBRE SUBGRUPOCAMA,
+      GASNOMBRE AREASERVICIO,
+      GPADOCPAC IDENTIFICACION,
+      GPANOMPAC NOMBREPAC,
+      GPATELEFO TELEFONOPAC,
+      GPAEDAPAC EDADPAC,
+      GPADIRECC DIRECCIONPAC,
+      GPAMUNPAC MUNICIPIOPAC,
+      GPAESTPAC ESTRATOPAC,
+      AINACOTEL TELEFONOACOMP,
+      AINACONOM NOMBREACOMP,
+      AINACUTEL TELEFONOACUD,
+      AINACUNOM NOMBREACUD,
+      AINACUPAR PARENTESCOACUD,
+      GDENOMBRE CONTRATO,
+      ACANOMBRE CENTROATENCION,
+      CASE
+          AINURGCON
+          WHEN -1 THEN 'NINGUNO'
+          WHEN 0 THEN 'URGENCIAS'
+          WHEN 1 THEN 'CONSULTA EXTERNA'
+          WHEN 2 THEN 'NACIDO EN LA IPS'
+          WHEN 3 THEN 'REMITIDO'
+          WHEN 4 THEN 'HOSPITALIZACION DE URGENCIAS'
+          WHEN 5 THEN 'HOSPITALIZACION'
+          WHEN 6 THEN 'IMAGENES'
+          WHEN 7 THEN 'LABORATORIO'
+          WHEN 8 THEN 'URGENCIA GINECOLOGIA'
+          WHEN 9 THEN 'QUIROFANO'
+          WHEN 10 THEN 'CIRUGIA AMBULATORIA'
+          WHEN 11 THEN 'CIRUGIA PROGRAMADA'
+          WHEN 12 THEN 'UCI NEONATAL'
+          WHEN 13 THEN 'UCI ADULTO'
+      END AS FORMAINGRESO,
+      CASE
+          AINCAUING
+          WHEN 0 THEN 'NINGUNA'
+          WHEN 1 THEN 'ENFERMEDAD PROFESIONAL'
+          WHEN 2 THEN 'HERIDOS EN COMBATE'
+          WHEN 3 THEN 'ENFERMEDAD GENERAL DE ADULTO'
+          WHEN 4 THEN 'ENFERMEDAD GENERAL DE PEDIATRIA'
+          WHEN 5 THEN 'ODONTOLOGIA'
+          WHEN 6 THEN 'ACCIDENTE DE TRANSITO'
+          WHEN 7 THEN 'CATASTROFE DE FISALUD'
+          WHEN 8 THEN 'QUEMADOS'
+          WHEN 9 THEN 'MATERNIDAD'
+          WHEN 10 THEN 'ACCIDENTE LABORAL'
+          WHEN 11 THEN 'CIRUGIA PROGRAMADA'
+      END AS CAUSAINGRESO,
+      CASE
+          GPASEXPAC
+          WHEN 1 THEN 'MASCULINO'
+          WHEN 2 THEN 'FEMENINO'
+      END AS GENEROPAC,
+      CASE
+          GPATIPAFI
+          WHEN 0 THEN 'NINGUNO'
+          WHEN 1 THEN 'COTIZANTE'
+          WHEN 2 THEN 'BENEFICIARIO'
+          WHEN 3 THEN 'ADICIONAL'
+          WHEN 4 THEN 'JUBILADO RETIRADO'
+          WHEN 5 THEN 'PENSIONADO'
+      END AS TIPOAFILIACION
+  FROM
+      GCVHOSCENPAC
+  WHERE
+      (HESFECSAL IS NULL)
+      AND (HCAESTADO < 3)`
+    );
+    return result;
+  } catch (error) {
+    cn.ThrBadReqExc();
+  }
+};

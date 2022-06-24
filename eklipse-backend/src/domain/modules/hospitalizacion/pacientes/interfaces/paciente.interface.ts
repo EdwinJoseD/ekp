@@ -1,0 +1,32 @@
+export interface PacienteI {
+  ESTANCIA: number;
+  DIASESTANCIA: string;
+  ADNINGRESO: number;
+  AINCONSEC: number;
+  FECHAINGRESO: string;
+  PRECODIGO: string;
+  PRENOMBRE: string;
+  FECHASALIDA: string;
+  CODIGOCAMA: string;
+  UBICACIONCAMA: string;
+  SUBGRUPOCAMA: string;
+  AREASERVICIO: string;
+  IDENTIFICACION: string;
+  NOMBREPAC: string;
+  TELEFONOPAC: string;
+  EDADPAC: number;
+  DIRECCIONPAC: string;
+  MUNICIPIOPAC: string;
+  ESTRATOPAC: string;
+  TELEFONOACOMP: string;
+  NOMBREACOMP: string;
+  TELEFONOACUD: string;
+  NOMBREACUD: string;
+  PARENTESCOACUD: string;
+  CONTRATO: string;
+  CENTROATENCION: string;
+  FORMAINGRESO: string;
+  CAUSAINGRESO: string;
+  GENEROPAC: string;
+  TIPOAFILIACION: string;
+}

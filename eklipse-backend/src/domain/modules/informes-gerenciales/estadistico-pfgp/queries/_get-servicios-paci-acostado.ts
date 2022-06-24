@@ -1,0 +1,37 @@
+import * as cn from "src/application/services/connection.service";
+import { GetAgrupPaciAcostadoDto } from "../dtos/get-agrup-paci-acostado.dto";
+
+export const getServiciosPacienteAcostado = async (dto: GetAgrupPaciAcostadoDto, context: string) => {
+  try {
+    const result = await cn.getDataSource(context).query(
+      `SELECT 
+      IsNull(GENSERIPS.SIPCODCUP, 'MEDICAMENTOS') AS ServicioCodigo,
+      IsNull(GENSERIPS.SIPNOMBRE, 'MEDICAMENTOS') AS ServicioNombre,
+    SUM(SLNSERPRO.SERCANTID * SLNSERPRO.SERVALPRO) AS TotalEjecutado
+   FROM HPNESTANC H
+    INNER JOIN HPNDEFCAM E ON H.HPNDEFCAM = E.OID
+    INNER JOIN ADNINGRESO ADNINGRESO ON ADNINGRESO.OID = E.ADNINGRESO
+    INNER JOIN GENDETCON GENDETCON ON GENDETCON.OID = ADNINGRESO.GENDETCON
+   LEFT JOIN SLNORDSER SLNORDSER ON SLNORDSER.ADNINGRES1 = ADNINGRESO.OID
+    LEFT JOIN SLNSERPRO ON SLNSERPRO.SLNORDSER1 = SLNORDSER.OID
+   LEFT JOIN SLNSERHOJ SLNSERHOJ ON SLNSERHOJ.OID = SLNSERPRO.OID
+   LEFT JOIN GENSERIPS GENSERIPS ON GENSERIPS.OID = SLNSERHOJ.GENSERIPS1
+    LEFT JOIN GENARESER GENARESER ON GENARESER.OID = SLNSERPRO.GENARESER1
+  WHERE 
+   ADNINGRESO.AINESTADO = 0 
+   AND SLNORDSER.SOSESTADO <> 2
+   AND E.HCAESTADO = 2
+   AND H.HESFECSAL IS NULL
+   AND GENDETCON.GDECODIGO = @0
+   AND ADNINGRESO.AINCONSEC = @1
+ GROUP BY 
+   GENSERIPS.SIPCODCUP,
+   GENSERIPS.SIPNOMBRE
+   ORDER BY TotalEjecutado DESC; `,
+      [dto.contrato, dto.ingreso]
+    );
+    return result;
+  } catch (error) {
+    cn.ThrBadReqExc();
+  }
+};

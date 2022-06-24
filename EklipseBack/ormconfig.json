@@ -1,0 +1,32 @@
+
+   {
+      "type": "mssql",
+      "host": "localhost",
+      "username": "EDWIN",
+      "password": "1234",
+      "database": "DGEMPRES01",
+      "synchronize": false,
+      "logging": false,
+      "ssl": true,
+     "extra": {
+      "ssl": {
+        "rejectUnauthorized": false
+      },
+      "validateConnection": false,
+      "trustServerCertificate": true
+    },
+      "entities": [
+        "src/**/*.entity{.ts,.js} || dist/**/*.entity{.ts,.js}"
+      ],
+      "migrations": [
+         "src/migration/**/*.ts"
+      ],
+      "subscribers": [
+         "src/subscriber/**/*.ts"
+      ],
+      "cli": {
+         "entitiesDir": "src/entity",
+         "migrationsDir": "src/migration",
+         "subscribersDir": "src/subscriber"
+      }
+   }
